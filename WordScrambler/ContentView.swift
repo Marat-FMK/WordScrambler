@@ -21,13 +21,17 @@ struct ContentView: View {
                         .textInputAutocapitalization(.never)
                 }
                 Section{
-                    ForEach(usedWords, id: \.self){
-                        Text("\($0)")
+                    ForEach(usedWords, id: \.self){ word in
+                        HStack{
+                            Text("") // количество букв каунт и циркле ( круг )
+                            Text("\(word)")
+                        }
                     }
                 }
             }
             .navigationTitle(rootWord)
             .onSubmit(addNewWord)
+            .onAppear(perform: startGame)
         }
     }
     func addNewWord() {
@@ -37,6 +41,18 @@ struct ContentView: View {
             usedWords.insert(answer, at: 0)
         }
         newWord = ""
+    }
+    
+    func startGame() {
+        if let startWordsURL = Bundle.main.url(forResource: "start", withExtension: "txt") { // ищем путь (ЮРЛ)
+            if let startWords = try? String(contentsOf: startWordsURL){ // Извлекаем строки из ТХТ
+                let allWords = startWords.components(separatedBy: "\n")// Унас в файле все с новой строки , поэтому тут каждый элемент добавляем в массив- каждый эл-т до переноса каретки
+                rootWord = allWords.randomElement() ?? "silkworm" // берем любое слово из массива
+                return
+            }
+        }
+        
+        fatalError(" Could not load start.txt from boundle. ")
     }
 }
 
