@@ -17,8 +17,24 @@ struct ContentView: View {
     @State private var errorMessage = ""
     @State private var showingError = false
     
+    private var result: Int {
+        usedWords.count
+    }
+    
     var body: some View {
         NavigationStack{
+            
+            Text("Score ")
+                .foregroundStyle(.blue)
+                .font(.largeTitle)
+                .padding()
+                .background(Color.red)
+                .clipShape(Capsule())
+                
+            Text("\(result)")
+                .font(.largeTitle)
+                .foregroundStyle(.purple)
+            
             List{
                 Section{
                     TextField("Enter you word", text: $newWord)
@@ -82,6 +98,7 @@ struct ContentView: View {
             if let startWords = try? String(contentsOf: startWordsURL){ // Извлекаем строки из ТХТ
                 let allWords = startWords.components(separatedBy: "\n")// Унас в файле все с новой строки , поэтому тут каждый элемент добавляем в массив- каждый эл-т до переноса каретки
                 rootWord = allWords.randomElement() ?? "silkworm" // берем любое слово из массива
+               // usedWords.removeAll() // Если надо очистиьть результаты после предидущего слова
                 return
             }
         }
