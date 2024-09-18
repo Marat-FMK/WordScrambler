@@ -41,6 +41,9 @@ struct ContentView: View {
             } message: {
                 Text(errorMessage)
             }
+            .toolbar {
+                Button("New word", action: startGame)
+            }
         }
         
     }
@@ -60,6 +63,11 @@ struct ContentView: View {
         
         guard isReal(word: answer) else {
             wordError(title: "Word not recognized", message: "Tou can't just make them up, you know!")
+            return
+        }
+        
+        guard someCheck() else {
+            wordError(title: "Error input", message: "word must be 4 letter and more^ root word dont take")
             return
         }
         
@@ -109,6 +117,13 @@ struct ContentView: View {
         errorTitle = title
         errorMessage = message
         showingError = true
+    }
+    
+    func someCheck() -> Bool {
+        if newWord != rootWord && newWord.count > 3 {
+            return true
+        }
+        return false
     }
 }
 
